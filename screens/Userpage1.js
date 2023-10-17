@@ -13,17 +13,34 @@ import {
   Modal,
   TextInput,
   Alert,
-  ScrollView,
 } from "react-native";
 import tw from "twrnc";
 import Entypo from "react-native-vector-icons/Entypo";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import BottomSheet from "@gorhom/bottom-sheet";
 
-const UserPage = ({ navigation }) => {
+const DataUi = ({ message, user_id, email, view, reply }) => {
+  return (
+    <View
+      style={tw`w-[340px] h-[109px] bg-[#FFFFFF] rounded-md ml-4 mt-5 border border-[0.5px]`}
+    >
+      <View style={tw`p-4`}>
+        <Text style={tw`text-left font-semibold text-[#183642]`}>
+          {user_id}
+        </Text>
+        <Text style={tw`text-left text-[#183642] mt-1`}>{message}</Text>
+      </View>
+      <View style={tw`flex-row  justify-between px-4`}>
+        <Text style={tw`text-[#183642] text-left `}>views</Text>
+        <Text style={tw`text-[#183642] text-left `}>reply</Text>
+      </View>
+    </View>
+  );
+};
+
+const UserPage1 = ({ navigation }) => {
   const [visibleModal, setvisibleModal] = useState(false);
   const [message, setmessgae] = useState("");
-  const [loading, setloading] = useState(true);
   const [allPosts, setallPosts] = useState([]);
 
   // handle add message
@@ -53,8 +70,7 @@ const UserPage = ({ navigation }) => {
           if (result.message === "post created successfully") {
             Alert.alert("Success", result.message);
             console.log(result.message);
-            getAllPosts();
-            setvisibleModal(false);
+            navigation.navigate("UserPage");
           } else {
             Alert.alert("Sorry", result.msg);
           }
@@ -93,7 +109,7 @@ const UserPage = ({ navigation }) => {
   return (
     <View style={tw` b-40`}>
       {/* Nav */}
-      <View style={tw`bg-gray-100 shadow-lg mt-5 h-14 flex-row items-center`}>
+      <View style={tw`bg-black shadow mt-5 h-14 flex-row items-center`}>
         <TouchableOpacity
           style={tw`ml-3`}
           onPress={() => navigation.navigate("Home")}
@@ -109,27 +125,20 @@ const UserPage = ({ navigation }) => {
         <Text style={tw`text-[#183642] text-lg font-bold px-6 mt-5`}>
           Posts
         </Text>
-        {/* Posts */}
-        <ScrollView>
-          {allPosts.map((post) => (
-            <View
-              style={tw`w-[340px] h-[109px] bg-[#FFFFFF] rounded-md ml-4 mt-5 border border-[0.5px]`}
-            >
-              <View style={tw`p-4`}>
-                <Text style={tw`text-left font-semibold text-[#183642]`}>
-                  email
-                </Text>
-                <Text style={tw`text-left text-[#183642] mt-1`}>
-                  {post.message}
-                </Text>
-              </View>
-              <View style={tw`flex-row  justify-between px-4`}>
-                <Text style={tw`text-[#183642] text-left `}>views</Text>
-                <Text style={tw`text-[#183642] text-left `}>reply</Text>
-              </View>
-            </View>
-          ))}
-        </ScrollView>
+        <View style={tw`mb-24`}>
+          <FlatList
+            data={allPosts}
+            renderItem={({ item }) => (
+              <DataUi
+                email={item.email}
+                message={item.message}
+                views={item.views}
+                reply={item.reply}
+              />
+            )}
+          />
+        </View>
+        <View style={tw`h-9 w-20 bg-black`}></View>
         <TouchableOpacity
           style={tw`absolute top-[510px] left-[300px] bg-[#183642] w-[54px] h-[55px] rounded-lg items-center justify-center `}
           onPress={() => setvisibleModal(true)}
@@ -171,4 +180,4 @@ const UserPage = ({ navigation }) => {
   );
 };
 
-export default UserPage;
+export default UserPage1;

@@ -28,6 +28,12 @@ const Home = ({ navigation }) => {
       >
         <Text style={tw`text-white `}>Get Started</Text>
       </TouchableOpacity>
+      <View style={tw`mt-5 flex-row gap-3`}>
+        <Text style={tw`text-black`}>Already having an account?</Text>
+        <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+          <Text style={tw`text-black`}>Login</Text>
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 };
